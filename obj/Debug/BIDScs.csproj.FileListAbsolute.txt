@@ -1,0 +1,6 @@
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\bin\Debug\BIDScs.dll
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\bin\Debug\BIDScs.pdb
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.csprojResolveAssemblyReference.cache
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.csproj.CoreCompileInputs.cache
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.dll
+C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.pdb

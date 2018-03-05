@@ -12,23 +12,36 @@ namespace BIDScs
     {
         static public bool Get()
         {
+            //ポート番号8931を開いて情報を受信する。
             return UdpGet(IPAddress.Any, 8931);
         }
         static public bool Get(IPAddress IP)
         {
+            //ポート番号8931を開いて、指定したIPアドレスからの情報を受信する。
             return UdpGet(IP, 8931);
         }
         static public bool Get(int Port)
         {
+            //指定したポートを開いて、すべてのIPアドレスからの情報を受信する。
             return UdpGet(IPAddress.Any, Port);
         }
         static public bool Get(IPAddress IP, int Port)
         {
+            //指定したポートを開いて、指定したIPアドレスからの情報を受信する。
             return UdpGet(IP, Port);
+        }
+
+        static public int[] Data
+        {
+            get
+            {
+                return intdata;
+            }
         }
 
         static public int Headder
         {
+            //ヘッダ情報を取得
             get
             {
                 return intdata[0];
@@ -37,8 +50,10 @@ namespace BIDScs
 
         static public class Spec
         {
+            //車両のスペックを取得
             static public int Brake
             {
+                //ブレーキ段数を取得
                 get
                 {
                     return intdata[1];
@@ -46,6 +61,7 @@ namespace BIDScs
             }
             static public int B67
             {
+                //67度にあたるブレーキ位置を取得
                 get
                 {
                     return intdata[2];
@@ -53,6 +69,7 @@ namespace BIDScs
             }
             static public int Power
             {
+                //力行段数を取得
                 get
                 {
                     return intdata[3];
@@ -60,6 +77,7 @@ namespace BIDScs
             }
             static public int ATS
             {
+                //ATS確認段数を取得
                 get
                 {
                     return intdata[4];
@@ -67,6 +85,7 @@ namespace BIDScs
             }
             static public int Car
             {
+                //車両数を取得
                 get
                 {
                     return intdata[5];
@@ -75,6 +94,7 @@ namespace BIDScs
         }
         static public class Handle
         {
+            //各種ハンドルの位置を取得できる。
             static public int Brake
             {
                 get
@@ -98,6 +118,7 @@ namespace BIDScs
             }
             static public int Const
             {
+                //(ハンドルじゃないけど)定速SWの状態を取得できる。
                 get
                 {
                     return intdata[9];
@@ -106,6 +127,7 @@ namespace BIDScs
         }
         static public class State
         {
+            //車両の各種状態を取得できる。圧力系は別。
             static public double Location
             {
                 get
@@ -151,6 +173,7 @@ namespace BIDScs
         }
         static public class Pres
         {
+            //車両の各種圧力を取得
             static public float BC
             {
                 get
@@ -202,15 +225,9 @@ namespace BIDScs
                 return SoundData;
             }
         }
-        static public int[] Data
-        {
-            get
-            {
-                return intdata;
-            }
-        }
         static public bool[] Keys
         {
+            //押下時true
             get
             {
                 return keys;
@@ -225,6 +242,8 @@ namespace BIDScs
         }
         static public int[,] Beacon
         {
+            //Beaconの情報を新しいものから10件格納している。
+            //[履歴番号(0~9),情報]の形。
             get
             {
                 return beacon;

@@ -1,0 +1,10 @@
+#exinclude these files
+*.cache
+*.lock
+*.ide
+*.ide-shm
+*.ide-wal
+
+#exinclude these folders
+obj\Debug\
+bin\Debug\

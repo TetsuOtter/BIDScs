@@ -4,3 +4,9 @@ C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.csprojResolveAs
 C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.csproj.CoreCompileInputs.cache
 C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.dll
 C:\Users\Tetsu_Otter\Source\Repos\BIDScs\BIDScs\obj\Debug\BIDScs.pdb
+C:\Users\tetsu\Documents\GitHub\BIDScs\bin\Debug\BIDScs.dll
+C:\Users\tetsu\Documents\GitHub\BIDScs\bin\Debug\BIDScs.pdb
+C:\Users\tetsu\Documents\GitHub\BIDScs\obj\Debug\BIDScs.csprojAssemblyReference.cache
+C:\Users\tetsu\Documents\GitHub\BIDScs\obj\Debug\BIDScs.csproj.CoreCompileInputs.cache
+C:\Users\tetsu\Documents\GitHub\BIDScs\obj\Debug\BIDScs.dll
+C:\Users\tetsu\Documents\GitHub\BIDScs\obj\Debug\BIDScs.pdb

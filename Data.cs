@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace BIDScs
 {
@@ -8,7 +9,13 @@ namespace BIDScs
     /// 受信したデータをint形式で返す
     /// </summary>
     static public int[] DataArray { get; set; } = new int[532];
-
+    static public int Version
+    {
+      get
+      {
+        return 10000;//1.00.00
+      }
+    }
 
     /// <summary>
     /// 受信したデータのヘッダ情報
@@ -167,7 +174,7 @@ namespace BIDScs
     /// <summary>
     /// Beaconの情報([履歴番号(0~9),情報番号]の形で格納)
     /// </summary>
-    static public int[,] Beacon { get; set; } = new int[10, 6];
+    static public int[,] Beacon { get; set; } = new int[16, 6];
 
     /// <summary>
     /// 現在の閉塞が現示している信号番号
@@ -180,6 +187,29 @@ namespace BIDScs
     static public Byte[,] Pointer { get; set; }
 
     /// <summary>
+    /// 時刻情報(HH:MM:SS s)
+    /// </summary>
+    static public class Time
+    {
+      /// <summary>
+      /// 「時」情報
+      /// </summary>
+      static public int Hour { get; set; } = new int();
+      /// <summary>
+      /// 「分」情報
+      /// </summary>
+      static public int Minute { get; set; } = new int();
+      /// <summary>
+      /// 「秒」情報
+      /// </summary>
+      static public int Second { get; set; } = new int();
+      /// <summary>
+      /// 「ミリ秒」情報
+      /// </summary>
+      static public int MSecond { get; set; } = new int();
+    }
+
+    /// <summary>
     /// 保安機器についての情報(準備中)
     /// 点滅でも点灯でもtrue 消灯でfalse
     /// </summary>
@@ -189,6 +219,7 @@ namespace BIDScs
       /// 動作中の保安装置
       /// </summary>
       static public byte Working { get; set; } = new byte();
+      //各番号+30を忘れないように
       /// <summary>
       /// ATS-Aに関する情報(準備中) 番号:0
       /// </summary>
@@ -590,7 +621,7 @@ namespace BIDScs
 
       }
       /// <summary>
-      /// 4型ATCに関する情報 番号:24
+      /// 4型ATCに関する情報(準備中) 番号:24
       /// </summary>
       static public class ATC_4
       {
@@ -607,7 +638,7 @@ namespace BIDScs
 
       }
       /// <summary>
-      /// 6型ATCに関する情報 番号:26
+      /// 6型ATCに関する情報(準備中) 番号:26
       /// </summary>
       static public class ATC_6
       {
@@ -806,20 +837,155 @@ namespace BIDScs
       //番号65-69は予備
 
       /// <summary>
-      /// ATACSに関する情報(準備中) 番号:70
+      /// ATACSに関する情報(準備中) 番号:100
       /// </summary>
       static public class ATACS
       {
 
       }
+      //以降127まで予備
+    }
+
+    /// <summary>
+    /// 車両機能に関する情報(準備中)
+    /// </summary>
+    static public class Func
+    {
       /// <summary>
-      /// JRのTASCに関する情報(準備中) 番号:71
+      /// JRのTASCに関する情報(準備中)
       /// </summary>
       static public class J_TASC
       {
 
       }
-      //以降255まで予備
+      /// <summary>
+      /// アナログ無線に関する情報
+      /// </summary>
+      static public class A_Musen
+      {
+        /// <summary>
+        /// チャンネル番号
+        /// </summary>
+        static public byte ChNum { get; set; } = new byte();
+      }
+      /// <summary>
+      /// デジタル無線に関する情報
+      /// </summary>
+      static public class D_Musen
+      {
+        /// <summary>
+        /// チャンネル番号
+        /// </summary>
+        static public byte ChNum { get; set; } = new byte();
+      }
+      /// <summary>
+      /// 情報表示装置(MON,TIMS,INTEROSなど)に関する情報
+      /// </summary>
+      static public class InfoDisp
+      {
+        
+      }
+      /// <summary>
+      /// 電圧に関する情報
+      /// </summary>
+      static public class Voltage
+      {
+        /// <summary>
+        /// 電圧タイプ
+        /// 0:設定なし 1:非電化 2:バッテリー 3:DC750 4:DC1500 5:AC20k 6:AC25k
+        /// </summary>
+        static public byte VoltType { get; set; } = new byte();
+        /// <summary>
+        /// 電圧切換中TF
+        /// </summary>
+        static public bool Changing { get; set; } = new bool();
+        /// <summary>
+        /// 切換後の電圧タイプ
+        /// 0:設定なし 1:非電化 2:バッテリー 3:DC750 4:DC1500 5:AC20k 6:AC25k
+        /// </summary>
+        static public byte NextVoltType { get; set; } = new byte();
+        /// <summary>
+        /// 現在の電圧値
+        /// </summary>
+        static public float Volt { get; set; } = new float();
+      }
+    }
+
+
+    static public void Sort(Byte[] b)
+    {
+      int Head = Convert.ToInt16(b.Take(2).ToArray());
+      int sk = 0;
+      int tk = 2;
+      switch (Head)
+      {
+        case 10:
+          //Version
+          break;
+        case 14:
+          //Spec
+          Spec.Brake = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Spec.Power = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Spec.ATS = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Spec.B67 = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Spec.Car = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          break;
+        case 15:
+          //State
+          State.Location = Convert.ToDouble(b.Skip(sk += tk).Take(tk = 8).ToArray());
+          State.Speed = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          State.Current = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          Func.Voltage.Volt = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());//予約機能
+          Handle.Brake= Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Handle.Power = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Handle.Lever = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          Time.Hour = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          Time.Minute = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          Time.Second = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          Time.MSecond = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          break;
+        case 16:
+          //State2
+          Pres.BC = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          Pres.MR = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          Pres.ER = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          Pres.BP = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          Pres.SAP = Convert.ToSingle(b.Skip(sk += tk).Take(tk = 4).ToArray());
+          State.Door = Convert.ToBoolean(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          SetSig = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          break;
+        case 17:
+          //Beacon=>準備中
+          break;
+        case 20:
+          //Sound
+          int Pn = 0;
+          while (Pn > 0 && sk < 32)
+          {
+            Pn = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+            Panel[Pn] = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          }
+          break;
+        case 21:
+          //Panel
+          int pn = 0;
+          while (pn > 0 && sk < 32)
+          { 
+            pn = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+            Panel[pn] = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 2).ToArray());
+          }
+          break;
+        case 22:
+          //KeyInfo
+          Horn[0] = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          Horn[1] = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          Horn[2] = Convert.ToInt16(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          for (int i = 6; i < 22; i++)
+          {
+            Keys[i] = Convert.ToBoolean(b.Skip(sk += tk).Take(tk = 1).ToArray());
+          }
+          break;
+      }
     }
   }
 }

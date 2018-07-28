@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BIDScs
 {
+  /// <summary>
+  /// 互換性確保のために残しています。Pipeの利用を推奨します。
+  /// </summary>
   static public class BIDS
   {
     static private bool[] keys = new bool[16];

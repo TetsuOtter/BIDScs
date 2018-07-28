@@ -3,12 +3,18 @@ using System.Linq;
 
 namespace BIDScs
 {
+  /// <summary>
+  /// 各種情報を入れるためのクラス
+  /// </summary>
   public class Data
   {
     /// <summary>
     /// 受信したデータをint形式で返す
     /// </summary>
     static public int[] DataArray { get; set; } = new int[532];
+    /// <summary>
+    /// バージョン情報を格納している(準備中)
+    /// </summary>
     static public int Version
     {
       get
@@ -911,7 +917,10 @@ namespace BIDScs
       }
     }
 
-
+    /// <summary>
+    /// 受信したデータを分割して適当な変数へ代入する
+    /// </summary>
+    /// <param name="b">受信した情報</param>
     static public void Sort(Byte[] b)
     {
       int Head = Convert.ToInt16(b.Take(2).ToArray());

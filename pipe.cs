@@ -2,23 +2,57 @@
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace BIDScs
 {
   /// <summary>
-  /// Pipeをクライアントとして利用するクラス
+  /// BVEと、クライアントとして通信するクラス
   /// </summary>
   public class Pipe : IDisposable
   {
     /// <summary>
-    /// 指定のサーバー
+    /// 自マシンとの通信を準備する
+    /// </summary>
+    public Pipe() => new Pipe(".");
+
+    /// <summary>
+    /// 指定のサーバーとの通信を準備する
     /// </summary>
     /// <param name="SVPCAddr">サーバーマシンのアドレス</param>
     public Pipe(string SVPCAddr)
     {
+      //自マシンへの指定は共有メモリを読む設定になる。
+
       SVPCName = SVPCAddr;
+      if (SVPCAddr == "." || SVPCAddr == "localhost")
+      {
+        IsLocal = true;
+        return;
+      }
+      string[] AddrSplit = SVPCAddr.Split('.');
+      if (AddrSplit[0] == "127")
+      {
+        IsLocal = true;
+        return;
+      }
+      AddrSplit = SVPCAddr.Split(':');
+      if (AddrSplit.Last() == "1")
+      {
+        IsLocal = true;
+        return;
+      }
+      IPHostEntry iphe = Dns.GetHostEntry(Dns.GetHostName());
+      foreach (IPAddress ip in iphe.AddressList)
+      {
+        if (ip.ToString() == SVPCAddr)
+        {
+          IsLocal = true;
+          return;
+        }
+      }
     }
 
     //1.新しいスレッドを建てる
@@ -208,7 +242,7 @@ namespace BIDScs
     private NamedPipeClientStream NPCS;
 
     bool IsDisposing = false;
-
+    bool IsOpen = false;
     /// <summary>
     /// 通信を開始する。
     /// </summary>
@@ -223,6 +257,7 @@ namespace BIDScs
       {
         SMemStart();
       }
+      IsOpen = true;
     }
 
     /// <summary>
@@ -247,10 +282,10 @@ namespace BIDScs
         UnmapViewOfFile(pMemory);
         CloseHandle(hSharedMemory);
       }
+      IsOpen = false;
     }
 
 
-    //https://docs.microsoft.com/ja-jp/dotnet/standard/io/how-to-use-named-pipes-for-network-interprocess-communication#robust-programming
 
     private void PipeStart()
     {
@@ -282,6 +317,13 @@ namespace BIDScs
       hSharedMemory = CreateFileMapping(UIntPtr.Zero, IntPtr.Zero, 4, 0, size, SRAMName);
       pMemory = MapViewOfFile(hSharedMemory, 983071, 0, 0, size);
     }
+
+    private byte[] PipeGetByte(byte data)
+    {
+      byte[] ReturnArray = new byte[32];
+      return ReturnArray;
+    }
+
 
     /// <summary>
     /// 車両のスペック情報
@@ -317,35 +359,35 @@ namespace BIDScs
       /// <summary>
       /// 列車位置[m]
       /// </summary>
-      double Location;
+      public double Location;
       /// <summary>
       /// 列車速度[km/h]
       /// </summary>
-      float Speed;
+      public float Speed;
       /// <summary>
       /// 電流[A]
       /// </summary>
-      float Current;
+      public float Current;
       /// <summary>
       /// (準備中)架線電圧[V]
       /// </summary>
-      float Voltage;
+      public float Voltage;
       /// <summary>
       /// Bノッチ位置
       /// </summary>
-      int BrakeNotch;
+      public int BrakeNotch;
       /// <summary>
       /// Pノッチ位置
       /// </summary>
-      int PowerNotch;
+      public int PowerNotch;
       /// <summary>
       /// レバーサー位置
       /// </summary>
-      int Reverser;
+      public int Reverser;
       /// <summary>
       /// (準備中)定速情報
       /// </summary>
-      int ConstSpeed;
+      public int ConstSpeed;
     }
     /// <summary>
     /// 車両状態(ドア情報含む)
@@ -355,117 +397,294 @@ namespace BIDScs
       /// <summary>
       /// BC圧[kPa]
       /// </summary>
-      float BC;
+      public float BC;
       /// <summary>
       /// MR圧[kPa]
       /// </summary>
-      float MR;
+      public float MR;
       /// <summary>
       /// ER圧[kPa]
       /// </summary>
-      float ER;
+      public float ER;
       /// <summary>
       /// BP圧[kPa]
       /// </summary>
-      float BP;
+      public float BP;
       /// <summary>
       /// SAP圧[kPa]
       /// </summary>
-      float SAP;
+      public float SAP;
       /// <summary>
       /// ドア閉扉情報
       /// </summary>
-      bool IsDoorClosed;
+      public bool IsDoorClosed;
       /// <summary>
       /// (準備中)信号番号
       /// </summary>
-      int SignalNum;
+      public int SignalNum;
       /// <summary>
       /// 時刻[時]
       /// </summary>
-      int Hour;
+      public int Hour;
       /// <summary>
       /// 時刻[分]
       /// </summary>
-      int Minute;
+      public int Minute;
       /// <summary>
       /// 時刻[秒]
       /// </summary>
-      int Second;
+      public int Second;
       /// <summary>
       /// 時刻[ミリ秒]
       /// </summary>
-      int Millisecond;
+      public int Millisecond;
     }
 
-
+    private SpecData _CarSpec;
+    private StateData _NowState;
+    private State2Data _NowState2;
+    private int[] _NowPanel = new int[256];
+    private int[] _NowSound = new int[256];
     /// <summary>
     /// 現在の車両スペック情報
     /// </summary>
-    public SpecData CarSpec;
+    public SpecData CarSpec
+    {
+      private set
+      {
+        _CarSpec = value;
+      }
+      get
+      {
+        if (!IsLocal) return _CarSpec;
+        else return SMemGetSpec();
+      }
+    }
     /// <summary>
     /// 現在の車両状態(ハンドル位置含む)
     /// </summary>
-    public StateData NowState;
+    public StateData NowState
+    {
+      get
+      {
+        if (!IsLocal) return _NowState;
+        else return SMemGetState();
+      }
+      private set
+      {
+        _NowState = value;
+      }
+    }
     /// <summary>
     /// 車両状態(ドア情報含む)
     /// </summary>
-    public State2Data NowState2;
+    public State2Data NowState2
+    {
+      get
+      {
+        if (!IsLocal) return _NowState2;
+        else return SMemGetState2();
+      }
+      private set
+      {
+        _NowState2 = value;
+      }
+    }
     /// <summary>
     /// 現在のパネル表示情報
     /// </summary>
-    public int[] NowPanel = new int[256];
+    public int[] NowPanel
+    {
+      get
+      {
+        if(!IsLocal) return _NowPanel;
+        else return ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).Panel;
+      }
+      private set
+      {
+        _NowPanel = value;
+      }
+    }
     /// <summary>
     /// 現在のサウンド情報
     /// </summary>
-    public int[] NowSound = new int[256];
+    public int[] NowSound
+    {
+      get
+      {
+        if (!IsLocal) return _NowSound;
+        else return ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).Sound;
+      }
+      private set
+      {
+        _NowSound = value;
+      }
+    }
 
 
     /// <summary>
     /// スペック情報を取得する。
     /// </summary>
     /// <returns>車両スペック情報</returns>
+    /// <exception cref="InvalidOperationException">通信未開始</exception>
     public SpecData GetSpec()
     {
-      SpecData rd = new SpecData();
-      return rd;
+      if (!IsOpen)
+      {
+        throw new InvalidOperationException("通信が開始していません。");
+      }
+      if (IsLocal) return SMemGetSpec();
+      else return PipeGetSpec();
     }
     /// <summary>
     /// ハンドル位置情報を含む車両状態を取得する
     /// </summary>
     /// <returns>取得した車両状態</returns>
+    /// <exception cref="InvalidOperationException">通信未開始</exception>
     public StateData GetState()
     {
-      StateData rd = new StateData();
-      return rd;
+      if (!IsOpen)
+      {
+        throw new InvalidOperationException("通信が開始していません。");
+      }
+      if (IsLocal) return SMemGetState();
+      else return PipeGetState();
     }
     /// <summary>
     /// ドア情報を含む車両状態を取得する
     /// </summary>
     /// <returns>取得した車両状態</returns>
+    /// <exception cref="InvalidOperationException">通信未開始</exception>
     public State2Data GetState2()
     {
-      State2Data rd = new State2Data();
-      return rd;
+      if (!IsOpen)
+      {
+        throw new InvalidOperationException("通信が開始していません。");
+      }
+      if (IsLocal) return SMemGetState2();
+      else return PipeGetState2();
     }
     /// <summary>
     /// 指定のPanelの表示情報を取得する
     /// </summary>
     /// <param name="Indexes">取得するPanelのインデックス</param>
     /// <returns>取得したPanel情報</returns>
+    /// <exception cref="InvalidOperationException">通信未開始</exception>
     public List<int> GetPanel(List<int> Indexes)
     {
-      List<int> GetList = new List<int>();
-      return GetList;
+      if (!IsOpen)
+      {
+        throw new InvalidOperationException("通信が開始していません。");
+      }
+      if (IsLocal) return SMemGetPanel(Indexes);
+      else return PipeGetPanel(Indexes);
     }
     /// <summary>
     /// 指定のSoundの表示情報を取得する。
     /// </summary>
     /// <param name="Indexes">取得するSoundのインデックス</param>
     /// <returns>取得したSound情報</returns>
+    /// <exception cref="InvalidOperationException">通信未開始</exception>
     public List<int> GetSound(List<int> Indexes)
     {
+      if (!IsOpen)
+      {
+        throw new InvalidOperationException("通信が開始していません。");
+      }
+      if (IsLocal) return SMemGetSound(Indexes);
+      else return PipeGetSound(Indexes);
+    }
+
+
+    private SpecData PipeGetSpec()
+    {
+      SpecData rd = new SpecData();
+      return rd;
+    }
+    private StateData PipeGetState()
+    {
+      StateData rd = new StateData();
+      return rd;
+    }
+    private State2Data PipeGetState2()
+    {
+      State2Data rd = new State2Data();
+      return rd;
+    }
+    private List<int> PipeGetPanel(List<int> Indexes)
+    {
       List<int> GetList = new List<int>();
+      return GetList;
+    }
+    private List<int> PipeGetSound(List<int> Indexes)
+    {
+      List<int> GetList = new List<int>();
+      return GetList;
+    }
+
+
+
+    private SpecData SMemGetSpec()
+    {
+      return (SpecData)(object)((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).SpecData;
+
+    }
+    private StateData SMemGetState()
+    {
+      State s = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).StateData;
+      Hand h = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).HandleData;
+      return new StateData()
+      {
+        BrakeNotch = h.B,
+        ConstSpeed = h.C,
+        Current = s.I,
+        Location = s.Z,
+        PowerNotch = h.P,
+        Reverser = h.R,
+        Speed = s.V,
+        Voltage = 0
+      };
+    }
+    private State2Data SMemGetState2()
+    {
+      State s = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).StateData;
+      TimeSpan t = new TimeSpan();
+      t = TimeSpan.FromMilliseconds(s.T);
+      return new State2Data()
+      {
+        BC = s.BC,
+        BP = s.BP,
+        ER = s.ER,
+        Hour = t.Hours,
+        IsDoorClosed = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).IsDoorClosed,
+        Millisecond = t.Milliseconds,
+        Minute = t.Minutes,
+        MR = s.MR,
+        SAP = s.SAP,
+        Second = t.Seconds,
+        SignalNum = 0
+      };
+    }
+    private List<int> SMemGetPanel(List<int> Indexes)
+    {
+      int[] p = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).Panel;
+      List<int> GetList = new List<int>();
+      for(int i = 0; i < Indexes.Count; i++)
+      {
+        if (Indexes[i] >= 0 && Indexes[i] < 256) GetList.Add(p[Indexes[i]]);
+        else GetList.Add(-1);
+      }
+      return GetList;
+    }
+    private List<int> SMemGetSound(List<int> Indexes)
+    {
+      int[] p = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).Sound;
+      List<int> GetList = new List<int>();
+      for (int i = 0; i < Indexes.Count; i++)
+      {
+        if (Indexes[i] >= 0 && Indexes[i] < 256) GetList.Add(p[Indexes[i]]);
+        else GetList.Add(-1);
+      }
       return GetList;
     }
   }

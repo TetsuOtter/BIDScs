@@ -4,1024 +4,411 @@
         <name>BIDScs</name>
     </assembly>
     <members>
-        <member name="T:BIDScs.BIDS">
+        <member name="T:TR.BIDScs.Pipe">
             <summary>
-            互換性確保のために残しています。Pipeの利用を推奨します。
+            BVEと、クライアントとして通信するクラス
             </summary>
         </member>
-        <member name="M:BIDScs.BIDS.Get">
+        <member name="M:TR.BIDScs.Pipe.#ctor">
             <summary>
-            ポート番号8931を開いて情報を受信する。
-            </summary>
-            <returns>受信成功か否か</returns>
-        </member>
-        <member name="M:BIDScs.BIDS.Get(System.Net.IPAddress)">
-            <summary>
-            ポート番号8931を開いて、指定したIPアドレスからの情報を受信する。
-            </summary>
-            <param name="IP">送信元のIPアドレス</param>
-            <returns>受信成功か否か</returns>
-        </member>
-        <member name="M:BIDScs.BIDS.Get(System.Int32)">
-            <summary>
-            指定したポートを開いて、任意のIPアドレスからの情報を受信する。
-            </summary>
-            <param name="Port">受信するために開けるポート</param>
-            <returns>受信成功か否か</returns>
-        </member>
-        <member name="M:BIDScs.BIDS.Get(System.Net.IPAddress,System.Int32)">
-            <summary>
-            指定したポートを開いて、指定したIPアドレスからの情報を受信する。
-            </summary>
-            <param name="IP">送信元のIPアドレス</param>
-            <param name="Port">受信するために開けるポート</param>
-            <returns></returns>
-        </member>
-        <member name="P:BIDScs.BIDS.Exception">
-            <summary>
-            Exceptionをgetできる
+            自マシンとの通信を準備する
             </summary>
         </member>
-        <member name="T:BIDScs.Data">
+        <member name="T:TR.BIDScs.Pipe.Spec">
             <summary>
-            各種情報を入れるためのクラス
+            スペック情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.DataArray">
+        <member name="F:TR.BIDScs.Pipe.Spec.B">
             <summary>
-            受信したデータをint形式で返す
+            Bノッチ段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Version">
+        <member name="F:TR.BIDScs.Pipe.Spec.P">
             <summary>
-            バージョン情報を格納している(準備中)
+            Pノッチ段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Headder">
+        <member name="F:TR.BIDScs.Pipe.Spec.A">
             <summary>
-            受信したデータのヘッダ情報
+            ATS確認段数
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Spec">
+        <member name="F:TR.BIDScs.Pipe.Spec.J">
             <summary>
-            車両のスペックに関する情報
+            B67に相当する段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Spec.Brake">
+        <member name="F:TR.BIDScs.Pipe.Spec.C">
             <summary>
-            ブレーキ段数
+            編成車両数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Spec.B67">
+        <member name="T:TR.BIDScs.Pipe.State">
             <summary>
-            67度にあたるブレーキ位置(段数)
+            車両状態情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Spec.Power">
+        <member name="F:TR.BIDScs.Pipe.State.Z">
             <summary>
-            力行段数
+            列車位置情報[m]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Spec.ATS">
+        <member name="F:TR.BIDScs.Pipe.State.V">
             <summary>
-            ATS確認ができる最低の段数
+            列車速度[km/h]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Spec.Car">
+        <member name="F:TR.BIDScs.Pipe.State.T">
             <summary>
-            車両両数
+            0時からの経過時間[ms]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Handle">
+        <member name="F:TR.BIDScs.Pipe.State.BC">
             <summary>
-            各種ハンドルの位置情報
+            BC圧力[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Handle.Brake">
+        <member name="F:TR.BIDScs.Pipe.State.MR">
             <summary>
-            ブレーキハンドル位置
+            MR圧力[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Handle.Power">
+        <member name="F:TR.BIDScs.Pipe.State.ER">
             <summary>
-            マスコンハンドル位置
+            ER圧力[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Handle.Lever">
+        <member name="F:TR.BIDScs.Pipe.State.BP">
+            <summary>
+            BP圧力[kPa]
+            </summary>
+        </member>
+        <member name="F:TR.BIDScs.Pipe.State.SAP">
+            <summary>
+            SAP圧力[kPa]
+            </summary>
+        </member>
+        <member name="F:TR.BIDScs.Pipe.State.I">
+            <summary>
+            電流[A]
+            </summary>
+        </member>
+        <member name="T:TR.BIDScs.Pipe.Hand">
+            <summary>
+            ハンドル位置情報
+            </summary>
+        </member>
+        <member name="F:TR.BIDScs.Pipe.Hand.B">
+            <summary>
+            Bノッチ位置
+            </summary>
+        </member>
+        <member name="F:TR.BIDScs.Pipe.Hand.P">
+            <summary>
+            Pノッチ位置
+            </summary>
+        </member>
+        <member name="F:TR.BIDScs.Pipe.Hand.R">
             <summary>
             レバーサーハンドル位置
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Handle.Const">
+        <member name="F:TR.BIDScs.Pipe.Hand.C">
             <summary>
-            定速スイッチの状態(2018年4月1日現在未実装)
+            定速制御情報
             </summary>
         </member>
-        <member name="T:BIDScs.Data.State">
+        <member name="T:TR.BIDScs.Pipe.Beacon">
             <summary>
-            各種圧力を除く車両の各種状態
+            地上子情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.State.Location">
+        <member name="F:TR.BIDScs.Pipe.Beacon.Num">
             <summary>
-            現在の列車位置
+            Beaconの番号
             </summary>
         </member>
-        <member name="P:BIDScs.Data.State.Speed">
+        <member name="F:TR.BIDScs.Pipe.Beacon.Sig">
             <summary>
-            現在の列車速度
+            対応する閉塞の現示番号
             </summary>
         </member>
-        <member name="P:BIDScs.Data.State.Time">
+        <member name="F:TR.BIDScs.Pipe.Beacon.Z">
             <summary>
-            現在時刻
+            対応する閉塞までの距離[m]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.State.Current">
+        <member name="F:TR.BIDScs.Pipe.Beacon.Data">
             <summary>
-            電動機電流
+            Beaconの第三引数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.State.Door">
+        <member name="T:TR.BIDScs.Pipe.BIDSSharedMemoryData">
             <summary>
-            ドア状態(閉扉=true)
+            共有メモリに格納するための構造体
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Pres">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.IsEnabled">
             <summary>
-            車両の各種圧力状態
+            BIDSpp.dllが有効かどうか
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pres.BC">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.VersionNum">
             <summary>
-            BC圧(ブレーキシリンダ圧力)
+            BIDSpp.dllのバージョン
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pres.MR">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.SpecData">
             <summary>
-            MR圧(元空気ダメ圧力)
+            スペック情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pres.ER">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.StateData">
             <summary>
-            ER圧(釣り合い空気ダメ圧力)
+            車両状態情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pres.BP">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.HandleData">
             <summary>
-            BP圧(ブレーキ管圧力
+            ハンドル位置情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pres.SAP">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.IsDoorClosed">
             <summary>
-            SAP圧(直通管圧力)
+            ドア閉扉情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Panel">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.Panel">
             <summary>
-            Panelの状態
+            パネル表示情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Sound">
+        <member name="F:TR.BIDScs.Pipe.BIDSSharedMemoryData.Sound">
             <summary>
-            Soundの状態
+            サウンド状態情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Keys">
+        <member name="M:TR.BIDScs.Pipe.Open">
             <summary>
-            ボタンの押下状態(押下時true)
+            通信を開始する。
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Horn">
+        <member name="M:TR.BIDScs.Pipe.Dispose">
             <summary>
-            吹鳴されている警笛の種類
+            通信を終了する
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Beacon">
+        <member name="T:TR.BIDScs.Pipe.SpecData">
             <summary>
-            Beaconの情報([履歴番号(0~9),情報番号]の形で格納)
+            車両のスペック情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.SetSig">
+        <member name="F:TR.BIDScs.Pipe.SpecData.Brake">
             <summary>
-            現在の閉塞が現示している信号番号
+            Bノッチ段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Pointer">
+        <member name="F:TR.BIDScs.Pipe.SpecData.Power">
             <summary>
-            予約 ポインタ用
+            Pノッチ段数
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Time">
+        <member name="F:TR.BIDScs.Pipe.SpecData.ATSCheck">
             <summary>
-            時刻情報(HH:MM:SS s)
+            ATS確認段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Time.Hour">
+        <member name="F:TR.BIDScs.Pipe.SpecData.B67">
             <summary>
-            「時」情報
+            B67に相当する段数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Time.Minute">
+        <member name="F:TR.BIDScs.Pipe.SpecData.CarNum">
             <summary>
-            「分」情報
+            編成車両数
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Time.Second">
+        <member name="T:TR.BIDScs.Pipe.StateData">
             <summary>
-            「秒」情報
+            車両状態(ハンドル位置を含む)
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Time.MSecond">
+        <member name="F:TR.BIDScs.Pipe.StateData.Location">
             <summary>
-            「ミリ秒」情報
+            列車位置[m]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan">
+        <member name="F:TR.BIDScs.Pipe.StateData.Speed">
             <summary>
-            保安機器についての情報(準備中)
-            点滅でも点灯でもtrue 消灯でfalse
+            列車速度[km/h]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.Working">
+        <member name="F:TR.BIDScs.Pipe.StateData.Current">
             <summary>
-            動作中の保安装置
+            電流[A]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_A">
+        <member name="F:TR.BIDScs.Pipe.StateData.Voltage">
             <summary>
-            ATS-Aに関する情報(準備中) 番号:0
+            (準備中)架線電圧[V]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_B">
+        <member name="F:TR.BIDScs.Pipe.StateData.BrakeNotch">
             <summary>
-            ATS-Bに関する情報 番号:1
+            Bノッチ位置
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_B.TF">
+        <member name="F:TR.BIDScs.Pipe.StateData.PowerNotch">
             <summary>
-            保安装置が使用できるかどうか
+            Pノッチ位置
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_B.Power">
+        <member name="F:TR.BIDScs.Pipe.StateData.Reverser">
             <summary>
-            電源表示TF
+            レバーサー位置
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_B.Working">
+        <member name="F:TR.BIDScs.Pipe.StateData.ConstSpeed">
             <summary>
-            動作表示TF
+            (準備中)定速情報
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_S">
+        <member name="T:TR.BIDScs.Pipe.State2Data">
             <summary>
-            ATS-Sに関する情報 番号:2
+            車両状態(ドア情報含む)
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_S.TF">
+        <member name="F:TR.BIDScs.Pipe.State2Data.BC">
             <summary>
-            保安装置が使用できるかどうか
+            BC圧[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_S.Power">
+        <member name="F:TR.BIDScs.Pipe.State2Data.MR">
             <summary>
-            電源表示TF
+            MR圧[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_S.Working">
+        <member name="F:TR.BIDScs.Pipe.State2Data.ER">
             <summary>
-            動作表示TF
+            ER圧[kPa]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_Sn">
+        <member name="F:TR.BIDScs.Pipe.State2Data.BP">
             <summary>
-            ATS-Snに関する情報 番号:4
+            BP圧[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sn.TF">
+        <member name="F:TR.BIDScs.Pipe.State2Data.SAP">
             <summary>
-            保安装置が使用できるかどうか
+            SAP圧[kPa]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sn.Power">
+        <member name="F:TR.BIDScs.Pipe.State2Data.IsDoorClosed">
             <summary>
-            保安装置電源TF
+            ドア閉扉情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sn.Working">
+        <member name="F:TR.BIDScs.Pipe.State2Data.SignalNum">
             <summary>
-            ATS動作表示TF
+            (準備中)信号番号
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_St">
+        <member name="F:TR.BIDScs.Pipe.State2Data.Hour">
             <summary>
-            ATS-STに関する情報 番号:5
+            時刻[時]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_St.TF">
+        <member name="F:TR.BIDScs.Pipe.State2Data.Minute">
             <summary>
-            保安装置が使用できるかどうか
+            時刻[分]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_St.Power">
+        <member name="F:TR.BIDScs.Pipe.State2Data.Second">
             <summary>
-            電源表示TF
+            時刻[秒]
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_St.Working">
+        <member name="F:TR.BIDScs.Pipe.State2Data.Millisecond">
             <summary>
-            動作表示TF
+            時刻[ミリ秒]
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_Sw">
+        <member name="P:TR.BIDScs.Pipe.CarSpec">
             <summary>
-            ATS-Swに関する情報 番号:6
+            現在の車両スペック情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sw.TF">
+        <member name="P:TR.BIDScs.Pipe.NowState">
             <summary>
-            保安装置が使用できるかどうか
+            現在の車両状態(ハンドル位置含む)
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sw.Power">
+        <member name="P:TR.BIDScs.Pipe.NowState2">
             <summary>
-            電源表示TF
+            車両状態(ドア情報含む)
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Sw.Working">
+        <member name="P:TR.BIDScs.Pipe.NowPanel">
             <summary>
-            動作表示TF
+            現在のパネル表示情報
             </summary>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_SS">
+        <member name="P:TR.BIDScs.Pipe.NowSound">
             <summary>
-            ATS-SSに関する情報 番号:7
+            現在のサウンド情報
             </summary>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SS.TF">
+        <member name="M:TR.BIDScs.Pipe.GetSpec">
             <summary>
-            保安装置が使用できるかどうか
+            スペック情報を取得する。
             </summary>
+            <returns>車両スペック情報</returns>
+            <exception cref="T:System.InvalidOperationException">通信未開始</exception>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SS.Power">
+        <member name="M:TR.BIDScs.Pipe.GetState">
             <summary>
-            電源表示TF
+            ハンドル位置情報を含む車両状態を取得する
             </summary>
+            <returns>取得した車両状態</returns>
+            <exception cref="T:System.InvalidOperationException">通信未開始</exception>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SS.Working">
+        <member name="M:TR.BIDScs.Pipe.GetState2">
             <summary>
-            動作表示TF
+            ドア情報を含む車両状態を取得する
             </summary>
+            <returns>取得した車両状態</returns>
+            <exception cref="T:System.InvalidOperationException">通信未開始</exception>
         </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_SK">
+        <member name="M:TR.BIDScs.Pipe.GetPanel(System.Collections.Generic.List{System.Int32})">
             <summary>
-            ATS-SKに関する情報 番号:8
+            指定のPanelの表示情報を取得する
             </summary>
+            <param name="Indexes">取得するPanelのインデックス</param>
+            <returns>取得したPanel情報</returns>
+            <exception cref="T:System.InvalidOperationException">通信未開始</exception>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SK.TF">
+        <member name="M:TR.BIDScs.Pipe.GetSound(System.Collections.Generic.List{System.Int32})">
             <summary>
-            保安装置が使用できるかどうか
+            指定のSoundの表示情報を取得する。
             </summary>
+            <param name="Indexes">取得するSoundのインデックス</param>
+            <returns>取得したSound情報</returns>
+            <exception cref="T:System.InvalidOperationException">通信未開始</exception>
         </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SK.Power">
-            <summary>
-            電源表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SK.Working">
-            <summary>
-            動作表示TF
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_SF">
-            <summary>
-            ATS-SFに関する情報 番号:9
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SF.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SF.Power">
-            <summary>
-            電源表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_SF.Working">
-            <summary>
-            動作表示TF
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_P">
-            <summary>
-            ATS-Pに関する情報 番号:11
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Power">
-            <summary>
-            保安装置の電源投入状況
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Pattern_Approaching">
-            <summary>
-            パターン接近TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Brake_Working">
-            <summary>
-            ブレーキ動作TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Brake_Release">
-            <summary>
-            ブレーキ開放TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.ATS_P_Lump">
-            <summary>
-            「ATS-P」表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Broken">
-            <summary>
-            故障TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Pass_Stop">
-            <summary>
-            通停判別
-            0で無効 1なら停車 2なら通過
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_P.Pattern_Speed">
-            <summary>
-            パターン速度情報
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_Ps">
-            <summary>
-            ATS-Psに関する情報 番号:12
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Power">
-            <summary>
-            保安装置の電源投入状況
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Pattern_Created">
-            <summary>
-            パターン発生TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Pattern_Approaching">
-            <summary>
-            パターン接近TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Brake_Working">
-            <summary>
-            ブレーキ動作TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Brake_Release">
-            <summary>
-            ブレーキ開放TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.ATS_Ps_Lump">
-            <summary>
-            「ATS-Ps」表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Broken">
-            <summary>
-            故障TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Pass_Stop">
-            <summary>
-            通停判別
-            0で無効 1なら停車 2なら通過
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_Ps.Pattern_Speed">
-            <summary>
-            パターン速度情報
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_PT">
-            <summary>
-            ATS-PTに関する情報 番号:13
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Power">
-            <summary>
-            保安装置の電源投入状況
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Pattern_Approaching">
-            <summary>
-            パターン接近TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Brake_Working">
-            <summary>
-            ブレーキ動作TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Brake_Release">
-            <summary>
-            ブレーキ開放TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.ATS_PT_Lump">
-            <summary>
-            「ATS-PT」表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Broken">
-            <summary>
-            故障TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Pass_Stop">
-            <summary>
-            通停判別
-            0で無効 1なら停車 2なら通過
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PT.Pattern_Speed">
-            <summary>
-            パターン速度情報
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_PF">
-            <summary>
-            ATS-PFに関する情報 番号:14
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Power">
-            <summary>
-            保安装置の電源投入状況
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Pattern_Created">
-            <summary>
-            パターン発生TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Pattern_Approaching">
-            <summary>
-            パターン接近TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Brake_Working">
-            <summary>
-            ブレーキ動作TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Brake_Release">
-            <summary>
-            ブレーキ開放TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.ATS_PF_Lump">
-            <summary>
-            「ATS-PF」表示TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Broken">
-            <summary>
-            故障TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Pass_Stop">
-            <summary>
-            通停判別
-            0で無効 1なら停車 2なら通過
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATS_PF.Pattern_Speed">
-            <summary>
-            パターン速度情報
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_Dn">
-            <summary>
-            ATS-Dnに関する情報(準備中) 番号:16
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_DK">
-            <summary>
-            ATS-DKに関する情報(準備中) 番号:17
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_DF">
-            <summary>
-            ATS-DFに関する情報(準備中) 番号:18
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_DWs">
-            <summary>
-            ATS-DWs(D-TAS)に関する情報(準備中) 番号:19
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_1">
-            <summary>
-            1型ATCに関する情報(準備中) 番号:21
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_2">
-            <summary>
-            2型ATCに関する情報(準備中) 番号:22
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_3">
-            <summary>
-            3型ATCに関する情報(準備中) 番号:23
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_4">
-            <summary>
-            4型ATCに関する情報(準備中) 番号:24
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATC_4.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_5">
-            <summary>
-            5型ATCに関する情報(準備中) 番号:25
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_6">
-            <summary>
-            6型ATCに関する情報(準備中) 番号:26
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Hoan.ATC_6.TF">
-            <summary>
-            保安装置が使用できるかどうか
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_9">
-            <summary>
-            9型ATCに関する情報(準備中) 番号:27
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_10">
-            <summary>
-            10型ATCに関する情報(準備中) 番号:28
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_L">
-            <summary>
-            ATC-Lに関する情報(準備中) 番号:30
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.DS_ATC">
-            <summary>
-            DS-ATCに関する情報(準備中) 番号;31
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.RS_ATC">
-            <summary>
-            RS-ATCに関する情報(準備中) 番号:32
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.D_ATC">
-            <summary>
-            D-ATCに関する情報 番号:33
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_NS">
-            <summary>
-            ATC-NSに関する情報(準備中) 番号:34
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.KS_ATC">
-            <summary>
-            KS_ATCに関する情報(準備中) 番号:35
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.M_ATS">
-            <summary>
-            名鉄ATSに関する情報(準備中) 番号:40
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.KO_ATS">
-            <summary>
-            京王ATSに関する情報(準備中) 番号:41
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.OM_ATS">
-            <summary>
-            OM-ATSに関する情報(準備中) 番号:42
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.SO_ATS">
-            <summary>
-            相鉄ATSに関する情報(準備中) 番号:43
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.T_ATS">
-            <summary>
-            T形ATS(東武TSP式)に関する情報(準備中) 番号:44
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.HQ_ATS">
-            <summary>
-            阪急ATSに関する情報(準備中) 番号:45
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_1">
-            <summary>
-            1号型ATSに関する情報(準備中) 番号:46
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.C_ATS">
-            <summary>
-            C-ATSに関する情報(準備中) 番号:47
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.I_ATS">
-            <summary>
-            i-ATSに関する情報(準備中) 番号:48
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.K_ATS">
-            <summary>
-            K-ATSに関する情報(準備中) 番号:49
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.D_ATS_P">
-            <summary>
-            D-ATS-Pに関する情報(準備中) 番号:50
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_SP">
-            <summary>
-            ATS-SPに関する情報(準備中) 番号:51
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATS_PN">
-            <summary>
-            ATS-PNに関する情報(準備中) 番号:52
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.CS_ATC">
-            <summary>
-            (新)CS-ATCに関する情報(準備中) 番号:60
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATC_P">
-            <summary>
-            ATC-Pに関する情報(準備中) 番号:61
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.KO_ATC">
-            <summary>
-            京王ATCに関する情報(準備中) 番号:62
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.T_DATC">
-            <summary>
-            T-DATCに関する情報(準備中) 番号:63
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.WS_ATC">
-            <summary>
-            WS-ATCに関する情報(準備中) 番号:64
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Hoan.ATACS">
-            <summary>
-            ATACSに関する情報(準備中) 番号:100
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func">
-            <summary>
-            車両機能に関する情報(準備中)
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func.J_TASC">
-            <summary>
-            JRのTASCに関する情報(準備中)
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func.A_Musen">
-            <summary>
-            アナログ無線に関する情報
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.A_Musen.ChNum">
-            <summary>
-            チャンネル番号
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func.D_Musen">
-            <summary>
-            デジタル無線に関する情報
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.D_Musen.ChNum">
-            <summary>
-            チャンネル番号
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func.InfoDisp">
-            <summary>
-            情報表示装置(MON,TIMS,INTEROSなど)に関する情報
-            </summary>
-        </member>
-        <member name="T:BIDScs.Data.Func.Voltage">
-            <summary>
-            電圧に関する情報
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.Voltage.VoltType">
-            <summary>
-            電圧タイプ
-            0:設定なし 1:非電化 2:バッテリー 3:DC750 4:DC1500 5:AC20k 6:AC25k
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.Voltage.Changing">
-            <summary>
-            電圧切換中TF
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.Voltage.NextVoltType">
-            <summary>
-            切換後の電圧タイプ
-            0:設定なし 1:非電化 2:バッテリー 3:DC750 4:DC1500 5:AC20k 6:AC25k
-            </summary>
-        </member>
-        <member name="P:BIDScs.Data.Func.Voltage.Volt">
-            <summary>
-            現在の電圧値
-            </summary>
-        </member>
-        <member name="M:BIDScs.Data.Sort(System.Byte[])">
-            <summary>
-            受信したデータを分割して適当な変数へ代入する
-            </summary>
-            <param name="b">受信した情報</param>
-        </member>
-        <member name="T:BIDScs.Pipe">
-            <summary>
-            Pipeをクライアントとして利用するクラス
-            </summary>
-        </member>
-        <member name="M:BIDScs.Pipe.Start">
-            <summary>
-            サーバーとの通信を開始する。
-            </summary>
-        </member>
-        <member name="M:BIDScs.Pipe.Start(System.String)">
-            <summary>
-            サーバーとの通信を開始する。
-            </summary>
-            <param name="PCName">サーバーのコンピュータ名</param>
-        </member>
-        <member name="M:BIDScs.Pipe.Start(System.String,System.String)">
-            <summary>
-            サーバーとの通信を開始する。
-            </summary>
-            <param name="PCName">サーバーのコンピュータ名</param>
-            <param name="PpName">使用するパイプの名前</param>
-        </member>
-        <member name="M:BIDScs.Pipe.Stop">
-            <summary>
-            サーバーとの通信を終了する。
-            </summary>
-        </member>
-        <member name="M:BIDScs.Pipe.PipeGet">
-            <summary>
-            サーバーからのデータを読み取る
-            </summary>
-        </member>
-        <member name="M:BIDScs.Pipe.PipeSend(System.Byte[])">
-            <summary>
-            サーバーにByteデータを送信する
-            </summary>
-            <param name="sd">送信するデータ</param>
-        </member>
-        <member name="T:BIDScs.PipeSV">
-            <summary>
-            Pipeをサーバーとして使用するクラス
-            </summary>
-        </member>
-        <member name="M:BIDScs.PipeSV.Start">
-            <summary>
-            "BIDSPipe"というパイプを開く
-            </summary>
-        </member>
-        <member name="M:BIDScs.PipeSV.Start(System.String)">
-            <summary>
-            パイプを開く
-            </summary>
-            <param name="pn">開くパイプの名称</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.Stop">
-            <summary>
-            パイプを閉じる
-            </summary>
-        </member>
-        <member name="M:BIDScs.PipeSV.SpecSend(System.Int16,System.Int16,System.Int16,System.Int16,System.Byte)">
-            <summary>
-            Spec情報を送信する
-            </summary>
-            <param name="B">ブレーキハンドル段数</param>
-            <param name="P">ノッチハンドル段数</param>
-            <param name="A">ATS確認のできる段数</param>
-            <param name="J">常用最大段数</param>
-            <param name="C">編成両数</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.StateSend(System.Double,System.Single,System.Single,System.Single,System.Int16,System.Int16,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte)">
-            <summary>
-            State情報1を送信する。
-            </summary>
-            <param name="L">列車位置[m]</param>
-            <param name="S">列車速度[km/h]</param>
-            <param name="C">電流[A]</param>
-            <param name="V">電圧[V]</param>
-            <param name="B">ブレーキハンドル位置</param>
-            <param name="P">力行ハンドル位置</param>
-            <param name="R">レバーサーハンドル位置</param>
-            <param name="Co">定速スイッチ押下情報</param>
-            <param name="H">時刻の「時」情報</param>
-            <param name="M">時刻の「分」情報</param>
-            <param name="Se">時刻の「秒」情報</param>
-            <param name="MS">時刻の「ミリ秒」情報</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.State2Send(System.Single,System.Single,System.Single,System.Single,System.Single,System.Byte,System.Int16)">
-            <summary>
-            State情報2を送信する。
-            </summary>
-            <param name="C">BC圧[kPa]</param>
-            <param name="M">MR圧[kPa]</param>
-            <param name="E">ER圧[kPa]</param>
-            <param name="P">BP圧[kPa]</param>
-            <param name="A">SAP圧[kPa]</param>
-            <param name="D">ドア状態(trueで閉扉)</param>
-            <param name="S">現在の閉塞の信号現示番号</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.SoundSend(System.Byte[],System.Byte[])">
-            <summary>
-            変化したサウンド番号について送信する
-            </summary>
-            <param name="I">変化したSoundインデックス(最大で15個) 不要部は「-1」</param>
-            <param name="N">変化したSoundインデックスの変化後の値(最大で15個)</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.PanelSend(System.Byte[],System.Int16[])">
-            <summary>
-            変化したPanel番号について送信する
-            </summary>
-            <param name="I">変化したPanelのインデックス番号(最大10個) 不要部は「-1」</param>
-            <param name="N">変化した後のPanelの値(最大10個)</param>
-        </member>
-        <member name="M:BIDScs.PipeSV.KeyInfoSend(System.Byte[])">
-            <summary>
-            各ボタン(キー)の情報を送信する
-            </summary>
-            <param name="k">押下情報</param>
-        </member>
-        <member name="T:BIDScs.Properties.Resources">
+        <member name="T:TR.BIDScs.Properties.Resources">
             <summary>
               ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
             </summary>
         </member>
-        <member name="P:BIDScs.Properties.Resources.ResourceManager">
+        <member name="P:TR.BIDScs.Properties.Resources.ResourceManager">
             <summary>
               このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
             </summary>
         </member>
-        <member name="P:BIDScs.Properties.Resources.Culture">
+        <member name="P:TR.BIDScs.Properties.Resources.Culture">
             <summary>
-              厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
+              すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
               現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
             </summary>
         </member>

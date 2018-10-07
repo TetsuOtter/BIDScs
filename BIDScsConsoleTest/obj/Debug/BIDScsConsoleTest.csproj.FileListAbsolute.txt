@@ -1,0 +1,10 @@
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\bin\Debug\BIDScsConsoleTest.exe.config
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\bin\Debug\BIDScsConsoleTest.exe
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\bin\Debug\BIDScsConsoleTest.pdb
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\bin\Debug\BIDScs.dll
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\bin\Debug\BIDScs.xml
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\obj\Debug\BIDScsConsoleTest.csprojAssemblyReference.cache
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\obj\Debug\BIDScsConsoleTest.csproj.CoreCompileInputs.cache
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\obj\Debug\BIDScsConsoleTest.csproj.CopyComplete
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\obj\Debug\BIDScsConsoleTest.exe
+C:\Users\tetsu\Documents\GitHub\BIDScs\BIDScsConsoleTest\obj\Debug\BIDScsConsoleTest.pdb

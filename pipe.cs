@@ -4,9 +4,10 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
-namespace BIDScs
+namespace TR.BIDScs
 {
   /// <summary>
   /// BVEと、クライアントとして通信するクラス
@@ -16,7 +17,11 @@ namespace BIDScs
     /// <summary>
     /// 自マシンとの通信を準備する
     /// </summary>
-    public Pipe() => new Pipe(".");
+    public Pipe()
+    {
+      SVPCName = ".";
+      IsLocal = true;
+    }
 
     /// <summary>
     /// 指定のサーバーとの通信を準備する
@@ -239,9 +244,9 @@ namespace BIDScs
     static readonly uint size = (uint)Marshal.SizeOf(typeof(BIDSSharedMemoryData));
     static IntPtr hSharedMemory;
     static IntPtr pMemory;
-    private NamedPipeClientStream NPCS;
+    static private NamedPipeClientStream NPCS;
 
-    bool IsDisposing = false;
+    static bool IsDisposing = false;
     bool IsOpen = false;
     /// <summary>
     /// 通信を開始する。
@@ -251,7 +256,14 @@ namespace BIDScs
       if (!IsLocal)
       {
         NPCS = new NamedPipeClientStream(SVPCName, PipeName, PipeDirection.InOut);
-        PipeStart();
+        try
+        {
+          PipeStart();
+        }
+        catch (Exception)
+        {
+          throw;
+        }
       }
       else
       {
@@ -265,6 +277,7 @@ namespace BIDScs
     /// </summary>
     public void Dispose()
     {
+      IsDisposing = true;
       if (!IsLocal)
       {
         try
@@ -286,10 +299,10 @@ namespace BIDScs
     }
 
 
-
+    Thread thr = new Thread(PipeReadWork);
     private void PipeStart()
     {
-      if (NPCS.IsConnected == false)
+      if (!NPCS.IsConnected)
       {
         while (true)
         {
@@ -298,17 +311,61 @@ namespace BIDScs
             NPCS.Connect(500);
             //await NPCS.ConnectAsync(5000);
           }
-          catch (Exception e)
+          catch (Exception)
           {
-            DialogResult DR = MessageBox.Show(e.Message, "BIDScs.dll", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-            if (DR == DialogResult.Cancel){ break; }
+            throw;
           }
-          if (NPCS.IsConnected == true) { break; }
+          if (NPCS.IsConnected == true)  break;
         }
       }
       else
       {
-        MessageBox.Show("既に接続されています。", "BIDScs.dll", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        throw new InvalidOperationException("既にパイプは開かれています。");
+      }
+
+    }
+
+    static private void PipeReadWork()
+    {
+      while (NPCS.IsConnected && !IsDisposing)
+      {
+        byte[] ReadByte = new byte[32];
+        try
+        {
+          NPCS.Read(ReadByte, 0, 32);
+        }
+        catch (ObjectDisposedException) { }
+        catch (InvalidOperationException) { }
+        catch (Exception)
+        {
+          throw;
+        }
+        if(ReadByte.Skip(30).Take(2).ToArray()==new byte[2] { 0xFE, 0xFE })
+        {
+          short hed = 0;
+          try
+          {
+            hed = Convert.ToInt16(ReadByte.Take(2).ToArray());
+          }
+          catch(Exception)
+          {
+            throw;
+          }
+          //値を代入するまとまりごとにカウントアップをする=>NowXXXでそれを読んで更新されたかどうかを判別する
+          switch (hed)
+          {
+            case 14://Spec
+              break;
+            case 15://State1
+              break;
+            case 16://State2
+              break;
+            case 20://Sound
+              break;
+            case 21://Panel
+              break;
+          }
+        }
       }
     }
 
@@ -626,7 +683,14 @@ namespace BIDScs
 
     private SpecData SMemGetSpec()
     {
-      return (SpecData)(object)((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).SpecData;
+      SpecData s = new SpecData();
+      Spec sp = ((BIDSSharedMemoryData)Marshal.PtrToStructure(pMemory, typeof(BIDSSharedMemoryData))).SpecData;
+      s.ATSCheck = sp.A;
+      s.B67 = sp.J;
+      s.Brake = sp.B;
+      s.CarNum = sp.C;
+      s.Power=sp.P;
+      return s;
 
     }
     private StateData SMemGetState()

@@ -918,9 +918,19 @@
             サーバーとの通信を終了する。
             </summary>
         </member>
+        <member name="P:BIDScs.Pipe.IsConnected">
+            <summary>
+            パイプの接続が確立されているかどうか
+            </summary>
+        </member>
         <member name="M:BIDScs.Pipe.PipeGet">
             <summary>
             サーバーからのデータを読み取る
+            </summary>
+        </member>
+        <member name="F:BIDScs.Pipe.HeadS">
+            <summary>
+            Head Short
             </summary>
         </member>
         <member name="M:BIDScs.Pipe.PipeSend(System.Byte[])">
@@ -933,6 +943,69 @@
             <summary>
             Pipeをサーバーとして使用するクラス
             </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.NoAction">
+            <summary>
+            何もしない。検証用。
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.LoadCS">
+            <summary>
+            PIがLoadされたときに呼ぶ。パイプを開く。
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.DisposeCS">
+            <summary>
+            PIがDisposeされたときに呼ぶ。パイプを閉じる。
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.SetVehicleSpecCS(BIDScs.PipeSV.Spec)">
+            <summary>
+            PIのSetVehicleSpecが呼ばれたときに呼ぶ。VehicleSpecを記録する。
+            </summary>
+            <param name="s">スペック情報</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.SetPowerCS(System.Int32)">
+            <summary>
+            PIのSetPowerが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="p">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.SetBrakeCS(System.Int32)">
+            <summary>
+            PIのSetBrakeが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="b">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.SetReverserCS(System.Int32)">
+            <summary>
+            PIのSetReverserが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="r">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.SetSignalCS(System.Int32)">
+            <summary>
+            PIのSetSignalが呼ばれたときに呼ぶ。現在の閉塞の信号現示の番号を更新する。
+            </summary>
+            <param name="s">信号現示の番号</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.DoorOpenCS">
+            <summary>
+            PIのDoorOpenが呼ばれたときに呼ぶ。ドア状態を更新する。
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.DoorCloseCS">
+            <summary>
+            PIのDoorCloseが呼ばれたときに呼ぶ。ドア状態を更新する。
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.ElapseCS(BIDScs.PipeSV.State,System.Int32[],System.Int32[])">
+            <summary>
+            PIのElapseが呼ばれたときに呼ぶ。State情報を更新する。Panel/Soundの更新を確認する。
+            </summary>
+            <param name="S">State情報</param>
+            <param name="p">Panel表示情報</param>
+            <param name="s">Sound情報</param>
         </member>
         <member name="M:BIDScs.PipeSV.MsBxShow">
             <summary>
@@ -1025,6 +1098,442 @@
             各ボタン(キー)の情報を送信する
             </summary>
             <param name="k">押下情報</param>
+        </member>
+        <member name="T:BIDScs.PipeSV.Spec">
+            <summary>
+            車両スペックに関する情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Spec.B">
+            <summary>
+            ブレーキ段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Spec.P">
+            <summary>
+            ノッチ段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Spec.A">
+            <summary>
+            ATS確認段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Spec.J">
+            <summary>
+            常用最大段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Spec.C">
+            <summary>
+            編成車両数
+            </summary>
+        </member>
+        <member name="T:BIDScs.PipeSV.State">
+            <summary>
+            列車の現在の各種情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.X">
+            <summary>
+            列車位置[m]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.V">
+            <summary>
+            列車速度[km/h]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.T">
+            <summary>
+            0時からの経過時間[ms]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.BC">
+            <summary>
+            BC圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.MR">
+            <summary>
+            MR圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.ER">
+            <summary>
+            ER圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.BP">
+            <summary>
+            BP圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.SAP">
+            <summary>
+            SAP圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.State.I">
+            <summary>
+            電流[A]
+            </summary>
+        </member>
+        <member name="T:BIDScs.PipeSV.Handle">
+            <summary>
+            車両の操作情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Handle.B">
+            <summary>
+            ブレーキハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Handle.P">
+            <summary>
+            力行ハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Handle.R">
+            <summary>
+            レバーサーハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.PipeSV.Handle.C">
+            <summary>
+            定速制御スイッチ状態
+            </summary>
+        </member>
+        <member name="M:BIDScs.PipeSV.SpecSendConv(BIDScs.PipeSV.Spec)">
+            <summary>
+            Spec情報をByte配列に変換する
+            </summary>
+            <param name="S">Spec情報</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.StateSendConv(BIDScs.PipeSV.State,BIDScs.PipeSV.Handle)">
+            <summary>
+            State情報をState1用に変換する
+            </summary>
+            <param name="S">State情報</param>
+            <param name="H">Handle情報</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.State2SendConv(BIDScs.PipeSV.State,System.Boolean,System.Int32)">
+            <summary>
+            State情報をState2用に変換する
+            </summary>
+            <param name="S">State情報</param>
+            <param name="Door">ドア状態(trueで閉扉)</param>
+            <param name="Sig">現在の閉塞の信号現示番号</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.SoundSendConv(System.Byte[])">
+            <summary>
+            変化したサウンド番号を検出してByte化して返す
+            </summary>
+            <param name="S">Sound配列</param>
+        </member>
+        <member name="M:BIDScs.PipeSV.PanelSendConv(System.Int16[])">
+            <summary>
+            変化したパネル番号を検出してByte化して返す
+            </summary>
+            <param name="P">Panel配列</param>
+        </member>
+        <member name="T:BIDScs.NoStaPipeSV">
+            <summary>
+            Pipeをサーバーとして使用するクラス。staticを省略ver
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.NoAction">
+            <summary>
+            何もしない。検証用。
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.LoadCS">
+            <summary>
+            PIがLoadされたときに呼ぶ。パイプを開く。
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.DisposeCS">
+            <summary>
+            PIがDisposeされたときに呼ぶ。パイプを閉じる。
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SetVehicleSpecCS(BIDScs.NoStaPipeSV.Spec)">
+            <summary>
+            PIのSetVehicleSpecが呼ばれたときに呼ぶ。VehicleSpecを記録する。
+            </summary>
+            <param name="s">スペック情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SetPowerCS(System.Int32)">
+            <summary>
+            PIのSetPowerが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="p">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SetBrakeCS(System.Int32)">
+            <summary>
+            PIのSetBrakeが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="b">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SetReverserCS(System.Int32)">
+            <summary>
+            PIのSetReverserが呼ばれたときに呼ぶ。ハンドル位置を更新する。
+            </summary>
+            <param name="r">ハンドル位置</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SetSignalCS(System.Int32)">
+            <summary>
+            PIのSetSignalが呼ばれたときに呼ぶ。現在の閉塞の信号現示の番号を更新する。
+            </summary>
+            <param name="s">信号現示の番号</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.DoorOpenCS">
+            <summary>
+            PIのDoorOpenが呼ばれたときに呼ぶ。ドア状態を更新する。
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.DoorCloseCS">
+            <summary>
+            PIのDoorCloseが呼ばれたときに呼ぶ。ドア状態を更新する。
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.ElapseCS(BIDScs.NoStaPipeSV.State,System.Int32[],System.Int32[])">
+            <summary>
+            PIのElapseが呼ばれたときに呼ぶ。State情報を更新する。Panel/Soundの更新を確認する。
+            </summary>
+            <param name="S">State情報</param>
+            <param name="p">Panel表示情報</param>
+            <param name="s">Sound情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.MsBxShow">
+            <summary>
+            試験用
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.Start">
+            <summary>
+            "BIDSPipe"というパイプを開く
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.Start(System.String)">
+            <summary>
+            パイプを開く
+            </summary>
+            <param name="pn">開くパイプの名称</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.Stop">
+            <summary>
+            パイプを閉じる
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.PipeSend(System.Byte[])">
+            <summary>
+            clientに情報を送信する
+            </summary>
+            <param name="b">送信する情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.PipeGet">
+            <summary>
+            clientからの情報を読み取る
+            </summary>
+            <returns>clientが送信した情報</returns>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SpecSend(System.Int16,System.Int16,System.Int16,System.Int16,System.Byte)">
+            <summary>
+            Spec情報を送信する
+            </summary>
+            <param name="B">ブレーキハンドル段数</param>
+            <param name="P">ノッチハンドル段数</param>
+            <param name="A">ATS確認のできる段数</param>
+            <param name="J">常用最大段数</param>
+            <param name="C">編成両数</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.StateSend(System.Double,System.Single,System.Single,System.Single,System.Int16,System.Int16,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            State情報1を送信する。
+            </summary>
+            <param name="L">列車位置[m]</param>
+            <param name="S">列車速度[km/h]</param>
+            <param name="C">電流[A]</param>
+            <param name="V">電圧[V]</param>
+            <param name="B">ブレーキハンドル位置</param>
+            <param name="P">力行ハンドル位置</param>
+            <param name="R">レバーサーハンドル位置</param>
+            <param name="Co">定速スイッチ押下情報</param>
+            <param name="H">時刻の「時」情報</param>
+            <param name="M">時刻の「分」情報</param>
+            <param name="Se">時刻の「秒」情報</param>
+            <param name="MS">時刻の「ミリ秒」情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.State2Send(System.Single,System.Single,System.Single,System.Single,System.Single,System.Byte,System.Int16)">
+            <summary>
+            State情報2を送信する。
+            </summary>
+            <param name="C">BC圧[kPa]</param>
+            <param name="M">MR圧[kPa]</param>
+            <param name="E">ER圧[kPa]</param>
+            <param name="P">BP圧[kPa]</param>
+            <param name="A">SAP圧[kPa]</param>
+            <param name="D">ドア状態(trueで閉扉)</param>
+            <param name="S">現在の閉塞の信号現示番号</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SoundSend(System.Byte[],System.Byte[])">
+            <summary>
+            変化したサウンド番号について送信する
+            </summary>
+            <param name="I">変化したSoundインデックス(最大で15個) 不要部は「-1」</param>
+            <param name="N">変化したSoundインデックスの変化後の値(最大で15個)</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.PanelSend(System.Byte[],System.Int16[])">
+            <summary>
+            変化したPanel番号について送信する
+            </summary>
+            <param name="I">変化したPanelのインデックス番号(最大10個) 不要部は「-1」</param>
+            <param name="N">変化した後のPanelの値(最大10個)</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.KeyInfoSend(System.Byte[])">
+            <summary>
+            各ボタン(キー)の情報を送信する
+            </summary>
+            <param name="k">押下情報</param>
+        </member>
+        <member name="T:BIDScs.NoStaPipeSV.Spec">
+            <summary>
+            車両スペックに関する情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Spec.B">
+            <summary>
+            ブレーキ段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Spec.P">
+            <summary>
+            ノッチ段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Spec.A">
+            <summary>
+            ATS確認段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Spec.J">
+            <summary>
+            常用最大段数
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Spec.C">
+            <summary>
+            編成車両数
+            </summary>
+        </member>
+        <member name="T:BIDScs.NoStaPipeSV.State">
+            <summary>
+            列車の現在の各種情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.X">
+            <summary>
+            列車位置[m]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.V">
+            <summary>
+            列車速度[km/h]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.T">
+            <summary>
+            0時からの経過時間[ms]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.BC">
+            <summary>
+            BC圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.MR">
+            <summary>
+            MR圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.ER">
+            <summary>
+            ER圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.BP">
+            <summary>
+            BP圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.SAP">
+            <summary>
+            SAP圧[kPa]
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.State.I">
+            <summary>
+            電流[A]
+            </summary>
+        </member>
+        <member name="T:BIDScs.NoStaPipeSV.Handle">
+            <summary>
+            車両の操作情報
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Handle.B">
+            <summary>
+            ブレーキハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Handle.P">
+            <summary>
+            力行ハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Handle.R">
+            <summary>
+            レバーサーハンドル位置
+            </summary>
+        </member>
+        <member name="F:BIDScs.NoStaPipeSV.Handle.C">
+            <summary>
+            定速制御スイッチ状態
+            </summary>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SpecSendConv(BIDScs.NoStaPipeSV.Spec)">
+            <summary>
+            Spec情報をByte配列に変換する
+            </summary>
+            <param name="S">Spec情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.StateSendConv(BIDScs.NoStaPipeSV.State,BIDScs.NoStaPipeSV.Handle)">
+            <summary>
+            State情報をState1用に変換する
+            </summary>
+            <param name="S">State情報</param>
+            <param name="H">Handle情報</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.State2SendConv(BIDScs.NoStaPipeSV.State,System.Boolean,System.Int32)">
+            <summary>
+            State情報をState2用に変換する
+            </summary>
+            <param name="S">State情報</param>
+            <param name="Door">ドア状態(trueで閉扉)</param>
+            <param name="Sig">現在の閉塞の信号現示番号</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.SoundSendConv(System.Byte[])">
+            <summary>
+            変化したサウンド番号を検出してByte化して返す
+            </summary>
+            <param name="S">Sound配列</param>
+        </member>
+        <member name="M:BIDScs.NoStaPipeSV.PanelSendConv(System.Int16[])">
+            <summary>
+            変化したパネル番号を検出してByte化して返す
+            </summary>
+            <param name="P">Panel配列</param>
         </member>
         <member name="T:BIDScs.Properties.Resources">
             <summary>

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TR.BIDScs
 {
-  class tcp
+  class Tcp : IDisposable
   {
+    public void Dispose()
+    {
+    }
   }
 }

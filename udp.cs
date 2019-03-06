@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TR.BIDScs
 {
-  class udp
+  class Udp : IDisposable
   {
+    public void Dispose()
+    {
+    }
   }
 }

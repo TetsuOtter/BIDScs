@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIDScs", "BIDScs.csproj", "{B8B55AB6-4CC2-43F7-AF30-AFF35436785C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIDScsConsoleTest", "BIDScsConsoleTest\BIDScsConsoleTest.csproj", "{D1196EA8-CDEA-41E2-913C-0DED5A657F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIDSSMemLib.reader", "..\BIDSSMemLib\BIDSSMemLib.reader\BIDSSMemLib.reader.csproj", "{64158FB0-F424-49A9-A900-416FC3DD3D0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,14 @@ Global
 		{D1196EA8-CDEA-41E2-913C-0DED5A657F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1196EA8-CDEA-41E2-913C-0DED5A657F2F}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1196EA8-CDEA-41E2-913C-0DED5A657F2F}.Release|x86.Build.0 = Release|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Debug|x86.Build.0 = Debug|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{64158FB0-F424-49A9-A900-416FC3DD3D0C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

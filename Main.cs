@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using TR.BIDSSMemLib;
 
 namespace TR.BIDScs
 {
-  /// <summary>サーバーとしてアプリケーションを作成する際に便利なWrapperです。</summary>
+  /// <summary>サーバーとしてアプリケーションを作成する際に便利?なWrapper</summary>
   public class Server : IBIDSCom, IDisposable
   {
     IBIDSCom ibc = null;
@@ -26,7 +27,7 @@ namespace TR.BIDScs
         case ModeType.com:
           throw new NotImplementedException("COMポートを用いた通信は未実装です。");
         case ModeType.pipe:
-          throw new NotImplementedException("COMポートを用いた通信は未実装です。");
+          throw new NotImplementedException("名前付きパイプを用いた通信は未実装です。");
         case ModeType.smem:
           ibc = new smem();
           break;
@@ -34,7 +35,7 @@ namespace TR.BIDScs
           ibc = new tcp();
           break;
         case ModeType.udp:
-          throw new NotImplementedException("COMポートを用いた通信は未実装です。");
+          throw new NotImplementedException("UDPを用いた通信は未実装です。");
         default:
           throw new ArgumentException("指定された情報種類は用いることができません。未定義です。");
       }
@@ -53,11 +54,62 @@ namespace TR.BIDScs
         ibc.DataUpdated -= value;
       }
     }
+    /// <summary>BIDSSharedMemoryDataが更新された際に通知される</summary>
+    public event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged
+    {
+      add
+      {
+        ibc.BIDSSMemChanged += value;
+      }
+
+      remove
+      {
+        ibc.BIDSSMemChanged -= value;
+      }
+    }
+    /// <summary>OpenDが更新された際に通知される</summary>
+    public event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged
+    {
+      add
+      {
+        ibc.OpenDChanged += value;
+      }
+
+      remove
+      {
+        ibc.OpenDChanged -= value;
+      }
+    }
+    /// <summary>PanelDが更新された際に通知される</summary>
+    public event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged
+    {
+      add
+      {
+        ibc.PanelDChanged += value;
+      }
+
+      remove
+      {
+        ibc.PanelDChanged -= value;
+      }
+    }
+    /// <summary>SoundDが更新された際に通知される</summary>
+    public event EventHandler<SMemLib.ArrayDChangedEArgs> SoundDChanged
+    {
+      add
+      {
+        ibc.SoundDChanged += value;
+      }
+
+      remove
+      {
+        ibc.SoundDChanged -= value;
+      }
+    }
 
     /// <summary>通信を終了します。通信手段が設定されていなかった場合もTRUEを返します。</summary>
     /// <returns>終了したかどうか</returns>
     public bool Close() => ibc?.Close() ?? true;
-    
 
     /// <summary>すべてのリソースを解放します。通信中である場合、通信は終了されます。</summary>
     public void Dispose() => ibc?.Dispose();
@@ -145,8 +197,18 @@ namespace TR.BIDScs
   /// <summary>BIDScsがWrapする通信手段のインターフェース</summary>
   public interface IBIDSCom
   {
+    /// <summary>対外向け通信手段でない(T)か, 否(F)か</summary>
+    bool IsLocal { get; }
     /// <summary>データが更新されたことを通知するのに用います。</summary>
     event EventHandler<object> DataUpdated;
+    /// <summary> BIDSSMemDataが更新された際に呼ばれるイベント </summary>
+    event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged;
+    /// <summary> OpenDが更新された際に呼ばれるイベント </summary>
+    event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged;
+    /// <summary> Panelが更新された際に呼ばれるイベント </summary>
+    event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged;
+    /// <summary> Soundが更新された際に呼ばれるイベント </summary>
+    event EventHandler<SMemLib.ArrayDChangedEArgs> SoundDChanged;
 
     /// <summary>自動で接続先を探索し、接続する処理</summary>
     /// <returns>接続に成功したかどうか</returns>

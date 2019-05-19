@@ -10,12 +10,27 @@ namespace TR.BIDScs
 {
   internal class smem : IBIDSCom
   {
-    public bool IsLocal { get; } = true;
-    public event EventHandler<object> DataUpdated;
-    public event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged;
-    public event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged;
-    public event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged;
-    public event EventHandler<SMemLib.ArrayDChangedEArgs> SoundDChanged;
+    public bool IsLocal => true;
+    public event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged
+    {
+      add => SMemLib.BIDSSMemChanged += value;
+      remove => SMemLib.BIDSSMemChanged -= value;
+    }
+    public event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged
+    {
+      add => SMemLib.OpenDChanged += value;
+      remove => SMemLib.OpenDChanged -= value;
+    }
+    public event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged
+    {
+      add => SMemLib.PanelDChanged += value;
+      remove => SMemLib.PanelDChanged -= value;
+    }
+    public event EventHandler<SMemLib.ArrayDChangedEArgs> SoundDChanged
+    {
+      add => SMemLib.SoundDChanged += value;
+      remove => SMemLib.SoundDChanged -= value;
+    }
     SMemLib sml = null;
     public bool Close()
     {
@@ -55,7 +70,13 @@ namespace TR.BIDScs
 
     public object Read(InfoType type)
     {
-      throw new NotImplementedException();
+      switch (type)
+      {
+        case InfoType.BIDSSharedMemoryData:
+          return sml?.Read<BIDSSharedMemoryData>();
+
+        default: return null;
+      }
     }
 
     public byte[] ReadByte(InfoType type)

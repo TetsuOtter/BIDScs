@@ -10,7 +10,8 @@ namespace TR.BIDScs
 {
   internal class udp : IBIDSCom
   {
-    public event EventHandler<object> DataUpdated;
+    public bool IsLocal { get; } = false;
+
     public event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged;
     public event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged;
     public event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged;

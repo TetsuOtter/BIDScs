@@ -50,8 +50,6 @@ namespace TR.BIDScs
   {
     /// <summary>対外向け通信手段でない(T)か, 否(F)か</summary>
     bool IsLocal { get; }
-    /// <summary>データが更新されたことを通知するのに用います。</summary>
-    event EventHandler<object> DataUpdated;
     /// <summary> BIDSSMemDataが更新された際に呼ばれるイベント </summary>
     event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged;
     /// <summary> OpenDが更新された際に呼ばれるイベント </summary>

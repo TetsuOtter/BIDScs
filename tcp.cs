@@ -10,7 +10,8 @@ namespace TR.BIDScs
 {
   internal class tcp : IBIDSCom
   {
-    public event EventHandler<object> DataUpdated;
+    public bool IsLocal => false;
+
     public event EventHandler<SMemLib.BSMDChangedEArgs> BIDSSMemChanged;
     public event EventHandler<SMemLib.OpenDChangedEArgs> OpenDChanged;
     public event EventHandler<SMemLib.ArrayDChangedEArgs> PanelDChanged;

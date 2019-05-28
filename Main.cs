@@ -2,12 +2,55 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using TR.BIDSSMemLib;
 
 namespace TR.BIDScs
 {
+  /// <summary>便利なメソッド群を格納する</summary>
+  static public partial class UsefulFunc
+  {
+    static public object ByteAToStr<T>(byte[] b)
+    {
+      T ReturnStr = default;
+      int size = 0;
+      if(ReturnStr is PanelD || ReturnStr is SoundD)
+      {
+        //サイズ取得
+      }
+      else
+      {
+        size = Marshal.SizeOf(ReturnStr);
+        /*int size = Marshal.SizeOf(str);
+        IntPtr ptr = Marshal.AllocHGlobal(size);
+
+        Marshal.Copy(arr, 0, ptr, size);
+
+        str = (CIFSPacket)Marshal.PtrToStructure(ptr, str.GetType());
+        Marshal.FreeHGlobal(ptr);
+
+        return str;*/
+      }
+      return null;
+    }
+
+    static public byte[] StructToByteA<T>(T d)
+    {
+      if (d != null)
+      {
+        byte[] ra = new byte[Marshal.SizeOf(d)];
+        IntPtr ip = Marshal.AllocHGlobal(ra.Length);
+        Marshal.StructureToPtr(d, ip, true);
+        Marshal.Copy(ip, ra, 0, ra.Length);
+        Marshal.FreeHGlobal(ip);
+        return ra;
+      }
+      return null;
+    }
+  }
+
   /// <summary>BIDScsに実装された通信手段の列挙</summary>
   public enum ModeType
   {

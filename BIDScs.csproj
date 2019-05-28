@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TR.BIDScs</RootNamespace>
-    <AssemblyName>BIDScs</AssemblyName>
+    <AssemblyName>TR.BIDScs</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <DocumentationFile>bin\Debug\BIDScs.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\TR.BIDScs.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -32,18 +32,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <DocumentationFile>bin\Release\BIDScs.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\TR.BIDScs.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>bin\x86\Debug\BIDScs.xml</DocumentationFile>
+    <DocumentationFile>bin\x86\Debug\TR.BIDScs.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DocumentationFile>bin\x86\Release\BIDScs.xml</DocumentationFile>
+    <DocumentationFile>bin\x86\Release\TR.BIDScs.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -74,9 +74,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BIDSSMemLib\BIDSSMemLib.reader\BIDSSMemLib.reader.csproj">
-      <Project>{64158fb0-f424-49a9-a900-416fc3dd3d0c}</Project>
-      <Name>BIDSSMemLib.reader</Name>
+    <ProjectReference Include="..\BIDSSMemLib\BIDSSMemLib.rw\BIDSSMemLib.rw.csproj">
+      <Project>{ae16cc76-b20e-4425-a0c5-fdc24ebacc73}</Project>
+      <Name>BIDSSMemLib.rw</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BIDSSMemLib\BIDSSMemLib.structs\BIDSSMemLib.structs.csproj">
+      <Project>{8c8917ff-842b-49b2-a9b5-f59ae12f19d6}</Project>
+      <Name>BIDSSMemLib.structs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

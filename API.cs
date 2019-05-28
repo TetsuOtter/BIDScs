@@ -14,10 +14,12 @@ namespace TR.BIDScs
 
   class API
   {
+    
     public API(ModeType mt)
     {
 
     }
+
     public int GetInt(in string cmd) => (int?)ReqAnalizer(in cmd) ?? 0;
     public float GetSingle(in string cmd) => (float?)ReqAnalizer(in cmd) ?? 0f;
     public double GetDouble(in string cmd) => (double?)ReqAnalizer(in cmd) ?? 0d;
@@ -31,7 +33,7 @@ namespace TR.BIDScs
     }
 
 
-    private object ReqAnalizer(in string cmd)
+    public object ReqAnalizer(in string cmd)
     {
       if ((string)cmd.Take(2) == "TR")
       {

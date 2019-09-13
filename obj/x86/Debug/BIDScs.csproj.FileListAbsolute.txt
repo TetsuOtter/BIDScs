@@ -1,9 +1,0 @@
-C:\Users\tetsu\Documents\GitHub\BIDScs\bin\x86\Debug\BIDScs.pdb
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.Properties.Resources.resources
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.csproj.GenerateResource.cache
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.csproj.CoreCompileInputs.cache
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.pdb
-C:\Users\tetsu\Documents\GitHub\BIDScs\bin\x86\Debug\BIDScs.xml
-C:\Users\tetsu\Documents\GitHub\BIDScs\bin\x86\Debug\BIDScs.dll
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.csprojAssemblyReference.cache
-C:\Users\tetsu\Documents\GitHub\BIDScs\obj\x86\Debug\BIDScs.dll

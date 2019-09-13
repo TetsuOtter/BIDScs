@@ -5,6 +5,8 @@
 *.ide
 *.ide-shm
 *.ide-wal
+*.dll
+*.pdb
 
 #exinclude these folders
 obj\
